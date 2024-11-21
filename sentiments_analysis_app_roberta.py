@@ -7,7 +7,7 @@ import time
 # Load the sentiment analysis pipeline
 @st.cache_resource
 def load_model():
-    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment", device=0)
+    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment", device=-1)
 
 sentiment_analyzer = load_model()
 
