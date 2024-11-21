@@ -1,5 +1,5 @@
 streamlit
 pandas
 transformers
-torch==2.1.0+cu118
+torch
 openpyxl
