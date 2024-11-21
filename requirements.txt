@@ -1,5 +1,6 @@
 streamlit
 pandas
 transformers
-PyTorch
+torch==2.1.0+cu118
 TensorFlow
+openpyxl
