@@ -4,7 +4,7 @@ from transformers import pipeline
 from io import BytesIO
 import time
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
+from wordcloud import WordCloud, STOPWORDS
 
 # Load the sentiment analysis pipeline
 @st.cache_resource
@@ -70,8 +70,16 @@ if uploaded_file:
 
     # Word Cloud
     st.write("### Word Cloud of Texts")
+    # Define custom stopwords
+    custom_stopwords = set(STOPWORDS)
+    custom_stopwords.update(["Hello", "Hi", "hey", "greetings"])  # Add words to exclude
     text_data = " ".join(df['Text'].astype(str).tolist())
-    wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text_data)
+    wordcloud = WordCloud(
+        width=800,
+        height=400,
+        background_color="white",
+        stopwords=custom_stopwords
+    ).generate(text_data)
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
