@@ -72,7 +72,7 @@ if uploaded_file:
     st.write("### Word Cloud of Texts")
     # Define custom stopwords
     custom_stopwords = set(STOPWORDS)
-    custom_stopwords.update(["Hello", "Hi", "hey", "greetings"])  # Add words to exclude
+    custom_stopwords.update(["Hello", "Hi", "hey", "greetings","equity"])  # Add words to exclude
     text_data = " ".join(df['Text'].astype(str).tolist())
     wordcloud = WordCloud(
         width=800,
