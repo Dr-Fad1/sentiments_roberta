@@ -5,6 +5,7 @@ from io import BytesIO
 import time
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
+import random
 
 # Load the sentiment analysis pipeline
 @st.cache_resource
@@ -64,22 +65,36 @@ if uploaded_file:
     # Sentiment Counts
     sentiment_counts = df['Sentiment'].value_counts()
 
-    # Bar Chart
+    # Bar Chart with Custom Color
     st.write("### Sentiment Summary")
-    st.bar_chart(sentiment_counts)
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar(sentiment_counts.index, sentiment_counts.values, color="#5C4621")
+    ax.set_title("Sentiment Count", fontsize=16, color="#5C4621")
+    ax.set_ylabel("Count", fontsize=12, color="#5C4621")
+    ax.set_xlabel("Sentiment", fontsize=12, color="#5C4621")
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    st.pyplot(fig)
 
-    # Word Cloud
+    # Word Cloud with Custom Colors
     st.write("### Word Cloud of Texts")
-    # Define custom stopwords
     custom_stopwords = set(STOPWORDS)
     custom_stopwords.update(["Hello", "Hi", "hey", "greetings","equity"])  # Add words to exclude
     text_data = " ".join(df['Text'].astype(str).tolist())
+
+    # Define custom color function
+    def custom_color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+        colors = ["#5C4621", "#A32A29", "#221F1F", "#C04F15", "#F4AB7A", "#80350E"]
+        return random.choice(colors)
+
     wordcloud = WordCloud(
         width=800,
         height=400,
         background_color="white",
-        stopwords=custom_stopwords
+        stopwords=custom_stopwords,
+        color_func=custom_color_func
     ).generate(text_data)
+
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
