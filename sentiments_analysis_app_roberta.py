@@ -3,11 +3,13 @@ import pandas as pd
 from transformers import pipeline
 from io import BytesIO
 import time
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 
 # Load the sentiment analysis pipeline
 @st.cache_resource
 def load_model():
-    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment", device=-1)
+    return pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment", device=0)
 
 sentiment_analyzer = load_model()
 
@@ -28,7 +30,6 @@ if uploaded_file:
     # Load the Excel file
     try:
         df = pd.read_excel(uploaded_file)
-
     except Exception as e:
         st.error(f"Error loading file: {e}")
         st.stop()
@@ -59,6 +60,22 @@ if uploaded_file:
     st.write(f"Time taken: {time_taken:.2f} seconds")
     st.write("_______________________________________________")
     st.write("Data Output Preview:", df.head())
+
+    # Sentiment Counts
+    sentiment_counts = df['Sentiment'].value_counts()
+
+    # Bar Chart
+    st.write("### Sentiment Summary")
+    st.bar_chart(sentiment_counts)
+
+    # Word Cloud
+    st.write("### Word Cloud of Texts")
+    text_data = " ".join(df['Text'].astype(str).tolist())
+    wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text_data)
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    st.pyplot(plt)
 
     # Allow the user to download the results
     def to_excel(dataframe):
