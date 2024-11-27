@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 import random
 
+# Ensure DIN fonts are used
+from matplotlib import rcParams
+rcParams['font.family'] = 'DIN'
+
 # Load the sentiment analysis pipeline
 @st.cache_resource
 def load_model():
@@ -65,21 +69,21 @@ if uploaded_file:
     # Sentiment Counts
     sentiment_counts = df['Sentiment'].value_counts()
 
-    # Bar Chart with Custom Color
+    # Bar Chart with DIN font
     st.write("### Sentiment Summary")
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.bar(sentiment_counts.index, sentiment_counts.values, color="#5C4621")
-    ax.set_title("Sentiment Count", fontsize=16, color="#5C4621")
-    ax.set_ylabel("Count", fontsize=12, color="#5C4621")
-    ax.set_xlabel("Sentiment", fontsize=12, color="#5C4621")
+    ax.set_title("Sentiment Count", fontsize=16, color="#5C4621", fontname="DIN")
+    ax.set_ylabel("Count", fontsize=12, color="#5C4621", fontname="DIN")
+    ax.set_xlabel("Sentiment", fontsize=12, color="#5C4621", fontname="DIN")
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     st.pyplot(fig)
 
-    # Word Cloud with Custom Colors
+    # Word Cloud with DIN font
     st.write("### Word Cloud of Texts")
     custom_stopwords = set(STOPWORDS)
-    custom_stopwords.update(["Hello", "Hi", "hey", "greetings","equity"])  # Add words to exclude
+    custom_stopwords.update(["Hello", "Hi", "hey", "greetings", "equity"])  # Add words to exclude
     text_data = " ".join(df['Text'].astype(str).tolist())
 
     # Define custom color function
@@ -92,7 +96,8 @@ if uploaded_file:
         height=400,
         background_color="white",
         stopwords=custom_stopwords,
-        color_func=custom_color_func
+        color_func=custom_color_func,
+        font_path='DIN-Regular.ttf'  # Update this path with the location of your DIN font
     ).generate(text_data)
 
     plt.figure(figsize=(10, 5))
